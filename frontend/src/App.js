@@ -28,17 +28,20 @@ function App() {
   };
 
   const handleFileUpload = async (e) => {
-    const uploaded = e.target.files[0];
-    setFile(uploaded);
-    const formData = new FormData();
-    formData.append("file", uploaded);
-    try {
-      const res = await axios.post("https://qr-backend-lg4w.onrender.com/upload", formData);
-      setData(`https://qr-backend-lg4w.onrender.com${res.data.url}`);
-    } catch (err) {
-      alert("Upload fallito");
-    }
-  };
+  const uploaded = e.target.files[0];
+  setFile(uploaded);
+  const formData = new FormData();
+  formData.append("file", uploaded);
+  try {
+    const res = await axios.post("https://qr-backend-lg4w.onrender.com/upload", formData);
+    const filePath = res.data.url.startsWith("http")
+      ? res.data.url
+      : `https://qr-backend-lg4w.onrender.com${res.data.url}`;
+    setData(filePath);
+  } catch (err) {
+    alert("Upload fallito");
+  }
+};
 
   return (
     <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>

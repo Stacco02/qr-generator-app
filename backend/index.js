@@ -4,7 +4,7 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -17,7 +17,11 @@ const upload = multer({ storage });
 
 app.post("/upload", upload.single("file"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "Nessun file" });
-  const fileUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`;
+
+  const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+  const host = req.headers.host;
+  const fileUrl = `${protocol}://${host}/uploads/${req.file.filename}`;
+
   res.json({ url: fileUrl });
 });
 
