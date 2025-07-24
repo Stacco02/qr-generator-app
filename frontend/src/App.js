@@ -33,7 +33,7 @@ function App() {
     const formData = new FormData();
     formData.append("file", uploaded);
     try {
-      const res = await axios.post("http://localhost:5000/upload", formData);
+      const res = await axios.post("https://qr-backend-lg4w.onrender.com/upload", formData);
       setData(res.data.url);
     } catch (err) {
       alert("Upload fallito");
